@@ -1,51 +1,61 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
-import { Toaster } from 'react-hot-toast'
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { ThemeProvider } from '@/providers/ThemeProvider';
+import { AuthProvider } from '@/contexts/AuthContext';
+import Header from '@/components/Header';
+import { Toaster } from 'react-hot-toast';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'IntervU - Technical Interview Preparation',
-  description: 'Prepare for technical job interviews with AI-generated questions tailored to your role and experience level.',
-}
+  title: 'IntervU - Technical Interview Preparation Platform',
+  description: 'Prepare for technical interviews with AI-powered mock interviews tailored to your role and experience level.',
+  keywords: 'technical interview, coding interview, mock interview, software engineering, developer interview',
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <div className="min-h-screen bg-gray-50">
-          <header className="bg-white shadow-sm border-b">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex justify-between items-center h-16">
-                <div className="flex items-center">
-                  <h1 className="text-2xl font-bold text-primary-600">IntervU</h1>
-                  <span className="ml-2 text-gray-500 text-sm">Technical Interview Prep</span>
-                </div>
-                <nav className="hidden md:flex space-x-8">
-                  <a href="/" className="text-gray-700 hover:text-primary-600 transition-colors">
-                    Home
-                  </a>
-                  <a href="/practice" className="text-gray-700 hover:text-primary-600 transition-colors">
-                    Practice
-                  </a>
-                  <a href="/progress" className="text-gray-700 hover:text-primary-600 transition-colors">
-                    Progress
-                  </a>
-                </nav>
-              </div>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.className} bg-gray-50 dark:bg-gray-900 transition-colors duration-300`}>
+        <AuthProvider>
+          <ThemeProvider>
+            <div className="min-h-screen flex flex-col">
+              <Header />
+              <main className="flex-1">
+                {children}
+              </main>
             </div>
-          </header>
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            {children}
-          </main>
-        </div>
-        <Toaster position="top-right" />
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                duration: 4000,
+                style: {
+                  background: 'var(--toast-bg)',
+                  color: 'var(--toast-color)',
+                  border: '1px solid var(--toast-border)',
+                },
+                success: {
+                  iconTheme: {
+                    primary: '#10b981',
+                    secondary: '#ffffff',
+                  },
+                },
+                error: {
+                  iconTheme: {
+                    primary: '#ef4444',
+                    secondary: '#ffffff',
+                  },
+                },
+              }}
+            />
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
-  )
+  );
 } 
