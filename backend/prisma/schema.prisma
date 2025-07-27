@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -27,7 +27,7 @@ model Role {
   name        String   @unique
   description String
   category    String
-  techStack   String[]
+  techStack   String   // Store as JSON string for SQLite
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -40,7 +40,7 @@ model Interview {
   id                String   @id @default(cuid())
   roleId            String
   experienceLevel   String   // 'beginner' | 'junior' | 'mid' | 'senior'
-  questions         Json     // Stored as JSON array
+  questions         String   // Stored as JSON string for SQLite
   totalPoints       Int
   estimatedDuration Int      // in minutes
   createdAt         DateTime @default(now())
@@ -55,7 +55,7 @@ model UserSession {
   id          String    @id @default(cuid())
   userId      String
   interviewId String
-  answers     Json      // Stored as JSON array
+  answers     String    // Stored as JSON string for SQLite
   score       Int?
   completedAt DateTime?
   startedAt   DateTime  @default(now())
